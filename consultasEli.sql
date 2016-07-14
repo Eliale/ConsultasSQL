@@ -117,3 +117,7 @@ sp.fecha_contratacion)as mes, sum(sp.monto) as total_mes
    from "serviciosPrestamo" as sp 
     group by date_part('year',sp.fecha_contratacion), 
    date_part('month'::text, sp.fecha_contratacion) order by 1,2
+
+--14.- Total de ingresos por intereses en créditos. 
+   SELECT sum(monto - cantidad_prestamo) as ganancia
+  FROM bancouno."serviciosPrestamo"
