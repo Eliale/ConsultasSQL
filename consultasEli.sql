@@ -104,3 +104,16 @@ order by sc.id_cliente
 select ti.nombre,ti.id_cliente from t_prestado as tp,t_invertido as ti
 where ti.id_cliente=tp.id_cliente and ti.total_invertido - tp.total_prestamos > 0
 
+-- 11.- Total de prestamos otorgados por mes. 
+select date_part('year',sp.fecha_contratacion) as año , date_part('month'::text,
+sp.fecha_contratacion)as mes, count(sp.no_prestamo) as total_mes
+   from "serviciosPrestamo" as sp 
+    group by date_part('year',sp.fecha_contratacion), 
+   date_part('month'::text, sp.fecha_contratacion) order by 1,2
+
+--12.- Total del monto de prestamos otorgados por mes. 
+   select date_part('year',sp.fecha_contratacion) as año , date_part('month'::text,
+sp.fecha_contratacion)as mes, sum(sp.monto) as total_mes
+   from "serviciosPrestamo" as sp 
+    group by date_part('year',sp.fecha_contratacion), 
+   date_part('month'::text, sp.fecha_contratacion) order by 1,2
