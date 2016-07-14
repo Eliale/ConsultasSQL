@@ -121,3 +121,26 @@ sp.fecha_contratacion)as mes, sum(sp.monto) as total_mes
 --14.- Total de ingresos por intereses en créditos. 
    SELECT sum(monto - cantidad_prestamo) as ganancia
   FROM bancouno."serviciosPrestamo"
+
+
+
+-- 16.- ¿Que sexo ahorra mas en cuentas de ahorro? 
+select c.sexo,sum(sam.monto_total) as total_ahorrado from
+servicio_ahorro_mov as sam inner join cliente as c
+on sam.id_cliente = c.id_cliente
+group by c.sexo
+order by total_ahorrado desc
+limit 1
+
+
+
+
+-- 17.- ¿Que sexo ahorra mas en cuentas de inversión? 
+select c.sexo,sum(si.monto) as total_invertido from servicio_cuenta as sc inner join
+servicio_inversion as si
+on sc.no_cuenta=si.no_cuentagral
+inner join cliente as c
+on c.id_cliente = sc.id_cliente
+group by c.sexo
+order by total_invertido desc
+limit 1
