@@ -53,3 +53,30 @@ on c.id_cliente = sp.id_cliente inner join  servicio_cuenta as sc
 on sc.id_cliente = sp.id_cliente
 where sp.fecha_contratacion<(sc.fecha_contratacion + 90)
 group by sp.id_cliente,c.nombre,c.apellido_p,c.apellido_m 
+
+-- Version ligeramente mejorada xD
+select sp.id_cliente,c.nombre,c.apellido_p,c.apellido_m,sc.fecha_contratacion as fecha_contrato,sp.fecha_contratacion as fecha_prestamo from cliente as c inner join 
+"serviciosPrestamo" as sp
+on c.id_cliente = sp.id_cliente inner join  servicio_cuenta as sc
+on sc.id_cliente = sp.id_cliente
+where sp.fecha_contratacion<(sc.fecha_contratacion + 90)
+group by sp.id_cliente,c.nombre,c.apellido_p,c.apellido_m,sc.fecha_contratacion,sp.fecha_contratacion
+
+
+
+-- vista total prestado
+
+create view t_prestado as
+(select sp.id_cliente,c.nombre,sum(sp.cantidad_prestamo) as total_prestamos from
+"serviciosPrestamo" as sp inner join cliente as c
+on sp.id_cliente = c.id_cliente
+group by sp.id_cliente,c.nombre
+order by sp.id_cliente)
+
+-- vista total ahorrado
+create view t_ahorrado as
+(select sam.id_cliente,c.nombre,sum(sam.monto_total) as total_ahorrado from
+servicio_ahorro_mov as sam inner join cliente as c
+on sam.id_cliente = c.id_cliente
+group by sam.id_cliente,c.nombre
+order by sam.id_cliente)
