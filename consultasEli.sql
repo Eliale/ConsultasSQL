@@ -144,3 +144,17 @@ on c.id_cliente = sc.id_cliente
 group by c.sexo
 order by total_invertido desc
 limit 1
+
+
+
+-- 19.- ¿En que mes piden mas prestamos los hombres? 
+select date_part('year',sp.fecha_contratacion) as año , date_part('month'::text,
+sp.fecha_contratacion)as mes, count(sp.no_prestamo) as total_mes
+   from "serviciosPrestamo" as sp inner join cliente as c
+   on c.id_cliente = sp.id_cliente
+   where c.sexo='M'
+    group by date_part('year',sp.fecha_contratacion),
+   date_part('month'::text, sp.fecha_contratacion) 
+   order by total_mes desc 
+   limit 1
+   
