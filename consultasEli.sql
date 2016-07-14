@@ -80,3 +80,27 @@ servicio_ahorro_mov as sam inner join cliente as c
 on sam.id_cliente = c.id_cliente
 group by sam.id_cliente,c.nombre
 order by sam.id_cliente)
+
+--Clientes que pueden cubrir el saldo de su préstamo con su cuenta de ahorro. 
+select ta.nombre,ta.id_cliente from t_prestado as tp,t_ahorrado as ta
+where ta.id_cliente=tp.id_cliente and ta.total_ahorrado - tp.total_prestamos > 0
+
+--mejorada xD
+select ta.nombre,ta.id_cliente, ta.total_ahorrado - tp.total_prestamos as saldo_favor from t_prestado as tp,t_ahorrado as ta
+where ta.id_cliente=tp.id_cliente and ta.total_ahorrado - tp.total_prestamos > 0
+
+-- tardan mucho
+
+-- Total invertido
+create view t_invertido as
+select sc.id_cliente,c.nombre,sum(si.monto) as total_invertido from servicio_cuenta as sc inner join
+servicio_inversion as si
+on sc.no_cuenta=si.no_cuentagral
+inner join cliente as c
+on c.id_cliente = sc.id_cliente
+group by sc.id_cliente,c.nombre
+order by sc.id_cliente
+-- Clientes que pueden cubrir el saldo de su préstamo con su cuenta de inversión.
+select ti.nombre,ti.id_cliente from t_prestado as tp,t_invertido as ti
+where ti.id_cliente=tp.id_cliente and ti.total_invertido - tp.total_prestamos > 0
+
